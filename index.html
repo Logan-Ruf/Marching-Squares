@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Marching Squares</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="perlin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+</head>
+
+<body style="height: 200vh">
+<span id="slider"></span>
+<h1>TEST</h1>
+<div id="container">
+  <script src="marching_squares.js"></script>
+</div>
+<h1>test2</h1>
+</body>
+
+<script>
+  function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+    );
+  }
+  // var CANVAS_WIDTH  = 750;
+  // var CANVAS_HEIGHT = 700;
+  // var Space_Between = 10;
+  // var HORIZONTAL_RESOLUTION = CANVAS_WIDTH / Space_Between + 1;
+  // var VERTICLE_RESOLUTION  = CANVAS_HEIGHT / Space_Between + 1;
+  // generate_noise.seed(Math.random())
+  //
+  // function getNoise(x, y) {
+  //   d = new Date();
+  //   return generate_noise.perlin3(x/12,y/12, d.getTime() / 3000)+1
+  // }
+  //
+  // function setup() {
+  //   slider = createSlider(800, 1200, 1000);
+  //   slider.position(10, 10)
+  //   slider.style('width', '200px');
+  //   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+  //   frameRate(15);
+  //   noLoop();
+  // }
+  // scalar_array = Array(HORIZONTAL_RESOLUTION).fill(0).map(() => Array(VERTICLE_RESOLUTION).fill(0))
+  // function draw() {
+  //   let bias = (slider.value()/1000) ** 3
+  //   clear();
+  //   for(let y = 0; y < VERTICLE_RESOLUTION; y++){
+  //     for(let x = 0; x < HORIZONTAL_RESOLUTION; x++){
+  //       let point = {
+  //         data: Math.floor(getNoise(x,y) * bias),
+  //         xpos: x * Space_Between,
+  //         ypos: y * Space_Between,
+  //         x: x,
+  //         y: y,
+  //       }
+  //       scalar_array[x][y] = point
+  //       if(point.data !== 0){
+  //         arc(point.xpos, point.ypos, point.data * 2, point.data * 2, 0, TWO_PI)
+  //       }
+  //       if(x > 0 && y > 0){
+  //         let current_square = [scalar_array[x-1][y-1], scalar_array[x][y-1], scalar_array[x][y], scalar_array[x-1][y]]
+  //         let active_corners = current_square.filter(point => point.data >= 1)
+  //         // arc(current_square[0].xpos + Space_Between/2, current_square[0].ypos + Space_Between/2, 5, 5, 0, HALF_PI * active_corners.length)
+  //         if     (active_corners.length === 1){onePointActive(active_corners[0], x, y)}
+  //         else if(active_corners.length === 2){twoPointsActive(active_corners, x, y)}
+  //         else if(active_corners.length === 3){
+  //           array_diff = current_square.filter(point => !active_corners.includes(point))
+  //           onePointActive(array_diff[0], x, y)
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  //
+  // function mousePressed() {
+  //   loop();
+  // }
+  //
+  // function onePointActive(point, x, y){
+  //     noFill()
+  //     stroke(color(0,0,0))
+  //     let xval = point.x - x
+  //     let yval = point.y - y
+  //     let line_vector = {
+  //       x1: x*Space_Between - Space_Between/2,
+  //       y1: (y + yval) * Space_Between,
+  //       x2: (x + xval) * Space_Between,
+  //       y2: y*Space_Between - Space_Between/2,
+  //     }
+  //     line(line_vector.x1, line_vector.y1, line_vector.x2, line_vector.y2)
+  // }
+  //
+  // function twoPointsActive(active_corners, x, y){
+  //     // If points are complements treat them both as solo points
+  //     if(active_corners[0].y !== active_corners[1].y && active_corners[0].x !== active_corners[1].x){
+  //       onePointActive(active_corners[0], x, y)
+  //       onePointActive(active_corners[1], x, y)
+  //     }
+  //     else if (active_corners[0].x === active_corners[1].x){
+  //       xval = x * Space_Between - Space_Between/2
+  //       line(xval, y * Space_Between, xval, (y - 1) * Space_Between)
+  //     }
+  //     else if (active_corners[0].y === active_corners[1].y){
+  //       yval = y * Space_Between - Space_Between/2
+  //       line(x * Space_Between, yval, (x - 1) * Space_Between, yval)
+  //     }
+  // }
+</script>
+</html>
