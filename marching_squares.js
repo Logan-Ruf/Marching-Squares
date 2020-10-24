@@ -9,7 +9,7 @@ const box = document.querySelector('#container');
 const slider_pos = document.querySelector('#slider').getBoundingClientRect()
 
 function getNoise(x, y) {
-    d = new Date();
+    let d = new Date();
     return generate_noise.perlin3(x/12,y/12, d.getTime() / 3000)+1
 }
 
@@ -110,10 +110,16 @@ function twoPointsActive(active_corners, x, y){
 function isInViewport(el) {
     const rect = el.getBoundingClientRect();
     return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        rect.top >= CANVAS_HEIGHT/-2 &&
+        rect.left >= CANVAS_WIDTH/-2 &&
+        rect.bottom - CANVAS_HEIGHT/2 <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right - CANVAS_WIDTH/2  <= (window.innerWidth || document.documentElement.clientWidth)
 
     );
+}
+
+function getCanvasSize() {
+    let wH = window.innerHeight
+    let wW = window.innerWidth
+
 }
