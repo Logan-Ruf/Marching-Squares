@@ -1,9 +1,12 @@
 const CANVAS_WIDTH  = 750;
 const CANVAS_HEIGHT = 700;
-const Space_Between = 10;
+var Space_Between = 10;
 const HORIZONTAL_RESOLUTION = CANVAS_WIDTH / Space_Between + 1;
 const VERTICLE_RESOLUTION  = CANVAS_HEIGHT / Space_Between + 1;
 generate_noise.seed(Math.random())
+
+var ellipse_time = 0;
+var line_time = 0;
 
 const box = document.querySelector('#container');
 const slider_pos = document.querySelector('#slider').getBoundingClientRect()
@@ -35,10 +38,12 @@ scalar_array = Array(HORIZONTAL_RESOLUTION).fill(0).map(() => Array(VERTICLE_RES
 function draw() {
     let bias = (slider.value()/1000) ** 3
     clear();
+    background(0);
+    let square_size = Math.floor(Space_Between/3)
 
     // Main Loop
-    for(let y = 0; y < VERTICLE_RESOLUTION; y++){
-        for(let x = 0; x < HORIZONTAL_RESOLUTION; x++){
+    for(let x = 0; x < scalar_array.length; x++){
+        for(let y = 0; y < scalar_array[x].length; y++){
             // Create a point object for entry in the array
             // TODO: This could be done a lot more efficiently
             scalar_array[x][y] = {
@@ -50,8 +55,9 @@ function draw() {
             }
 
             // If point is active draw a circle
+            fill(0, 255, 0)
             if(scalar_array[x][y].data !== 0){
-                ellipse(scalar_array[x][y].xpos, scalar_array[x][y].ypos, 2)
+                square(scalar_array[x][y].xpos - square_size/2, scalar_array[x][y].ypos -square_size/2, square_size)
             }
 
             // If the point isn't on the left or top border, compare it to the points left and above it.
@@ -73,13 +79,20 @@ function draw() {
     }
 }
 
+function windowResized(){
+    canvasSize = getCanvasSize()
+    console.log("RESIZED CANVAS", canvasSize)
+    scalar_array = Array(canvasSize.width/Space_Between + 1).fill(0).map(() => Array(canvasSize.height/Space_Between + 1).fill(0))
+    resizeCanvas(canvasSize.width, canvasSize.height)
+}
+
 function mousePressed() {
     loop();
 }
 
 function onePointActive(point, x, y){
     noFill()
-    stroke(color(0,0,0))
+    stroke(color(0,255,0))
     let xval = point.x - x
     let yval = point.y - y
     let line_vector = {
@@ -99,6 +112,7 @@ function twoPointsActive(active_corners, x, y){
     }
     else if (active_corners[0].x === active_corners[1].x){
         xval = x * Space_Between - Space_Between/2
+
         line(xval, y * Space_Between, xval, (y - 1) * Space_Between)
     }
     else if (active_corners[0].y === active_corners[1].y){
@@ -121,5 +135,14 @@ function isInViewport(el) {
 function getCanvasSize() {
     let wH = window.innerHeight
     let wW = window.innerWidth
-
+    let canvasRatioWidth = .7
+    let cancasRatioHeight = .8
+    let canvasWidth = Math.floor(wW * canvasRatioWidth)
+    canvasWidth -= canvasWidth % Space_Between
+    let canvasHeight = Math.floor(wH * cancasRatioHeight)
+    canvasHeight -= canvasHeight % Space_Between
+    return {
+        "height": canvasHeight,
+        "width": canvasWidth,
+    }
 }
