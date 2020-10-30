@@ -1,16 +1,28 @@
-const CANVAS_WIDTH  = 750;
-const CANVAS_HEIGHT = 700;
+/* Created By Logan Ruf @ ckcollab.com
+ * Live demo and explanation available at [INSERT BLOG LINK]
+ *
+ *
+ * Perlin Noise code credit goes to Joseph Gentle https://github.com/josephg/noisejs
+ *
+ *
+ * This code was placed in the public domain by its original author,
+ * Logan Ruf. You may use it as you see fit, but
+ * attribution is appreciated.
+ *
+ */
+var CANVAS_HEIGHT;
+var CANVAS_WIDTH;
+var CANVAS_RATIO_WIDTH = .7
+var CANVAS_RATIO_HEIGHT = .8
+var scalar_array;
 var Space_Between = 10;
-const HORIZONTAL_RESOLUTION = CANVAS_WIDTH / Space_Between + 1;
-const VERTICLE_RESOLUTION  = CANVAS_HEIGHT / Space_Between + 1;
-generate_noise.seed(Math.random())
 
-var ellipse_time = 0;
-var line_time = 0;
 
 const box = document.querySelector('#container');
-const slider_pos = document.querySelector('#slider').getBoundingClientRect()
+var slider_parent = document.querySelector('#slider');
 
+//Initialize Perlin Noise
+generate_noise.seed(Math.random())
 function getNoise(x, y) {
     let d = new Date();
     return generate_noise.perlin3(x/12,y/12, d.getTime() / 3000)+1
@@ -19,23 +31,21 @@ function getNoise(x, y) {
 function setup() {
     // Create Slider For some interactivity
     slider = createSlider(800, 1250, 950);
-    slider.position(slider_pos.left, slider_pos.top)
-    slider.style('width', '200px');
+    slider.parent('slider')
 
     // Set Up canvas
-    canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    canvas = createCanvas(0, 0);
+    changeCanvasSize()
     canvas.parent('container')
     frameRate(30);
-    noLoop();
-
-    // p5 will draw circles at the corner unless specified
-    ellipseMode(CENTER);
+    loop();
 }
 
-// Create a 2D array to hold every point we will use for our algorithm
-scalar_array = Array(HORIZONTAL_RESOLUTION).fill(0).map(() => Array(VERTICLE_RESOLUTION).fill(0))
-
 function draw() {
+    // If window scrolls away from the Canvas, do not render animation
+    if(!isInViewport(box)){
+        return
+    }
     let bias = (slider.value()/1000) ** 3
     clear();
     background(0);
@@ -73,22 +83,15 @@ function draw() {
             }
         }
     }
-    // If window scrolls away from the Canvas. Pause the Animation
-    if(!isInViewport(box)){
-        noLoop();
-    }
 }
 
 function windowResized(){
-    canvasSize = getCanvasSize()
-    console.log("RESIZED CANVAS", canvasSize)
-    scalar_array = Array(canvasSize.width/Space_Between + 1).fill(0).map(() => Array(canvasSize.height/Space_Between + 1).fill(0))
-    resizeCanvas(canvasSize.width, canvasSize.height)
+    changeCanvasSize()
 }
 
-function mousePressed() {
-    loop();
-}
+// function mousePressed() {
+//     loop();
+// }
 
 function onePointActive(point, x, y){
     noFill()
@@ -132,17 +135,12 @@ function isInViewport(el) {
     );
 }
 
-function getCanvasSize() {
-    let wH = window.innerHeight
-    let wW = window.innerWidth
-    let canvasRatioWidth = .7
-    let cancasRatioHeight = .8
-    let canvasWidth = Math.floor(wW * canvasRatioWidth)
-    canvasWidth -= canvasWidth % Space_Between
-    let canvasHeight = Math.floor(wH * cancasRatioHeight)
-    canvasHeight -= canvasHeight % Space_Between
-    return {
-        "height": canvasHeight,
-        "width": canvasWidth,
-    }
+function changeCanvasSize() {
+    CANVAS_HEIGHT = Math.floor(window.innerHeight * CANVAS_RATIO_HEIGHT)
+    CANVAS_HEIGHT -= CANVAS_HEIGHT % Space_Between
+    CANVAS_WIDTH = Math.floor(window.innerWidth * CANVAS_RATIO_WIDTH)
+    CANVAS_WIDTH -= CANVAS_WIDTH % Space_Between
+    scalar_array = Array(CANVAS_WIDTH/Space_Between + 1).fill(0).map(() => Array(CANVAS_HEIGHT/Space_Between + 1).fill(0))
+    resizeCanvas(CANVAS_WIDTH, CANVAS_HEIGHT, false)
+    slider_parent.firstChild.style.width = CANVAS_WIDTH.toString() + "px"
 }
