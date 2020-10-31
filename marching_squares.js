@@ -89,10 +89,6 @@ function windowResized(){
     changeCanvasSize()
 }
 
-// function mousePressed() {
-//     loop();
-// }
-
 function onePointActive(point, x, y){
     noFill()
     stroke(color(0,255,0))
@@ -127,10 +123,10 @@ function twoPointsActive(active_corners, x, y){
 function isInViewport(el) {
     const rect = el.getBoundingClientRect();
     return (
-        rect.top >= CANVAS_HEIGHT/-2 &&
-        rect.left >= CANVAS_WIDTH/-2 &&
-        rect.bottom - CANVAS_HEIGHT/2 <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right - CANVAS_WIDTH/2  <= (window.innerWidth || document.documentElement.clientWidth)
+        rect.top >= CANVAS_HEIGHT &&
+        rect.left >= CANVAS_WIDTH &&
+        rect.bottom - CANVAS_HEIGHT <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right - CANVAS_WIDTH  <= (window.innerWidth || document.documentElement.clientWidth)
 
     );
 }
