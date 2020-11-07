@@ -124,8 +124,8 @@ function twoPointsActive(active_corners, x, y){
 function isInViewport(el) {
     const rect = el.getBoundingClientRect();
     return (
-        rect.top <= CANVAS_HEIGHT &&
-        rect.bottom - CANVAS_HEIGHT <= (window.innerHeight || document.documentElement.clientHeight)
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom >= 0
     )
 }
 
