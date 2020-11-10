@@ -10,35 +10,35 @@
  * attribution is appreciated.
  *
  */
-var CANVAS_HEIGHT;
-var CANVAS_WIDTH;
+var CANVAS_HEIGHT
+var CANVAS_WIDTH
 var CANVAS_RATIO_WIDTH = .7
 var CANVAS_RATIO_HEIGHT = .8
-var scalar_array;
-var SPACE_BETWEEN = 10;
+var scalar_array
+var SPACE_BETWEEN = 10
 
 
-const box = document.querySelector('#container');
-var slider_parent = document.querySelector('#slider');
+const box = document.querySelector('#container')
+var slider_parent = document.querySelector('#slider')
 
 //Initialize Perlin Noise
 generate_noise.seed(Math.random())
 function getNoise(x, y) {
-    let d = new Date();
+    let d = new Date()
     return generate_noise.perlin3(x/12,y/12, d.getTime() / 3000)+1
 }
 
 function setup() {
     // Create Slider For some interactivity
-    slider = createSlider(800, 1250, 950);
+    slider = createSlider(800, 1250, 950)
     slider.parent('slider')
 
     // Set Up canvas
-    canvas = createCanvas(0, 0);
+    canvas = createCanvas(0, 0)
     changeCanvasSize()
     canvas.parent('container')
-    frameRate(30);
-    loop();
+    frameRate(30)
+    loop()
 }
 
 function draw() {
@@ -47,8 +47,8 @@ function draw() {
         return
     }
     let bias = (slider.value()/1000) ** 3
-    clear();
-    background(0);
+    clear()
+    background(0)
     let square_size = Math.floor(SPACE_BETWEEN/3)
 
     // Main Loop
@@ -122,7 +122,7 @@ function twoPointsActive(active_corners, x, y){
 }
 
 function isInViewport(el) {
-    const rect = el.getBoundingClientRect();
+    const rect = el.getBoundingClientRect()
     return (
         rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
         rect.bottom >= 0
