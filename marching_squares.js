@@ -15,7 +15,7 @@ var CANVAS_WIDTH
 var CANVAS_RATIO_WIDTH = .7
 var CANVAS_RATIO_HEIGHT = .8
 var scalar_array
-var SPACE_BETWEEN = 10
+var SPACE_BETWEEN = 9
 
 
 const box = document.querySelector('#container')
@@ -34,7 +34,7 @@ function setup() {
     slider.parent('slider')
 
     // Set Up canvas
-    canvas = createCanvas(0, 0)
+    canvas = createCanvas(0, 0, WEBGL)
     changeCanvasSize()
     canvas.parent('container')
     frameRate(30)
@@ -58,8 +58,8 @@ function draw() {
             // TODO: This could be done a lot more efficiently
             scalar_array[x][y] = {
                 data: Math.floor(getNoise(x,y) * bias),
-                xpos: x * SPACE_BETWEEN,
-                ypos: y * SPACE_BETWEEN,
+                xpos: x * SPACE_BETWEEN - CANVAS_WIDTH / 2,
+                ypos: y * SPACE_BETWEEN - CANVAS_HEIGHT / 2,
                 x: x,
                 y: y,
             }
@@ -100,7 +100,7 @@ function onePointActive(point, x, y){
         x2: (x + xval) * SPACE_BETWEEN,
         y2: y*SPACE_BETWEEN - SPACE_BETWEEN/2,
     }
-    line(line_vector.x1, line_vector.y1, line_vector.x2, line_vector.y2)
+    line(line_vector.x1 - CANVAS_WIDTH / 2, line_vector.y1 - CANVAS_HEIGHT / 2, line_vector.x2 - CANVAS_WIDTH / 2, line_vector.y2 - CANVAS_HEIGHT / 2,)
 }
 
 function twoPointsActive(active_corners, x, y){
@@ -109,11 +109,11 @@ function twoPointsActive(active_corners, x, y){
     // If points are complements treat them both as solo points
     if (active_corners[0].x === active_corners[1].x){
         xval = x * SPACE_BETWEEN - SPACE_BETWEEN/2
-        line(xval, y * SPACE_BETWEEN, xval, (y - 1) * SPACE_BETWEEN)
+        line(xval - CANVAS_WIDTH / 2, y * SPACE_BETWEEN - CANVAS_HEIGHT / 2, xval - CANVAS_WIDTH / 2, (y - 1) * SPACE_BETWEEN - CANVAS_HEIGHT / 2)
     }
     else if (active_corners[0].y === active_corners[1].y){
         yval = y * SPACE_BETWEEN - SPACE_BETWEEN/2
-        line(x * SPACE_BETWEEN, yval, (x - 1) * SPACE_BETWEEN, yval)
+        line(x * SPACE_BETWEEN - CANVAS_WIDTH / 2, yval - CANVAS_HEIGHT / 2, (x - 1) * SPACE_BETWEEN - CANVAS_WIDTH / 2, yval - CANVAS_HEIGHT / 2)
     }
     else {
         onePointActive(active_corners[0], x, y)
